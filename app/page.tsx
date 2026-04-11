@@ -13,16 +13,12 @@ export default function Home() {
     .from("notes")
     .select("content")
     .order("created_at",{ascending:false})
-    .limit(1)
-    .single();
+    .range(1,1);
 
   if(error){
     console.log(error);
-  }else if(data){
-    setReceived(data.content);
-  }else{
-    setReceived("没有纸条");
-  } 
+  }
+   
   }
 
   useEffect(() => {
