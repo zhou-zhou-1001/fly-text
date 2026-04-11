@@ -1,5 +1,5 @@
-
 "use client";
+export const dynamic = 'force-dynamic';
 import { useEffect, useState } from "react";
 import { supabase } from "./lib/supabase";
 
@@ -17,8 +17,10 @@ export default function Home() {
 
   if(error){
     console.log(error);
+    setReceived("纸条飞丢了");  
+  }else{
+    setReceived(data[0].content);
   }
-   
   }
 
   useEffect(() => {
@@ -42,11 +44,10 @@ export default function Home() {
       alert("发送失败");
     }else{
       console.log("发送成功");
+      setInput("");
+      await fetchLastNote();
+      alert("纸条已飞走");
     }
-
-    setReceived(inputText);
-    setInput("");
-    console.log("纸条已飞走");
   }
 
   return (
