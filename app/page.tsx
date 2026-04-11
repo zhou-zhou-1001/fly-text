@@ -10,7 +10,7 @@ export default function Home() {
 
   const fetchLastNote = async () => { 
   const {data,error} = await supabase
-    .from("note")
+    .from("notes")
     .select("content")
     .order("created_at",{ascending:false})
     .limit(1)
@@ -18,19 +18,34 @@ export default function Home() {
 
   if(error){
     console.log(error);
-  }else{
+  }else if(data){
     setReceived(data.content);
-    } 
+  }else{
+    setReceived("没有纸条");
+  } 
   }
 
   useEffect(() => {
     fetchLastNote();
   }, []);
 
-  const  handleSend = () => {
+  const  handleSend = async () => {
     if (!inputText.trim()){
       alert("来写纸条");
       return;
+    }
+
+    const { error } = await supabase
+    .from("notes")
+    .insert([
+      { content: inputText },
+    ]);
+
+    if (error) {
+      console.log(error);
+      alert("发送失败");
+    }else{
+      console.log("发送成功");
     }
 
     setReceived(inputText);
